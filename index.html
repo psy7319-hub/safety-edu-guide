@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>교직원 안전교육 길잡이</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: 안내 띠 → STEP1 구분 타일 → STEP2 이수 기준 + 수강 경로 카드 → 공통 유의사항 */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --ink:#15302c; --muted:#5b6e6a; --line:#d7dfdc;
+  --brand:#0f5c52; --brand-soft:#e1efec; --hazard:#f4c20d; --hazard-ink:#3a2e00; --warn:#b4401f;
+  --display:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#17221f; --ink:#e4ece9; --muted:#9db0ab; --line:#2b3a36;
+  --brand:#5cc2b2; --brand-soft:#1d332e; --hazard:#f4c20d; --hazard-ink:#2a2100; --warn:#ff9575; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#17221f; --ink:#e4ece9; --muted:#9db0ab; --line:#2b3a36;
+  --brand:#5cc2b2; --brand-soft:#1d332e; --hazard:#f4c20d; --hazard-ink:#2a2100; --warn:#ff9575; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+.tape{height:10px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  background:repeating-linear-gradient(-45deg,var(--hazard) 0 18px,var(--ink) 18px 36px)}
+header{display:flex;flex-direction:column;gap:10px;padding-top:20px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,6vw,44px);line-height:1.15;margin:0;text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:62ch}
+h2{font-family:var(--display);font-weight:400;font-size:24px;margin:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h3{font-size:16px;margin:0}
+.stepno{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--hazard-ink);background:var(--hazard);padding:2px 8px;border-radius:4px}
+section{display:flex;flex-direction:column;gap:14px}
+.roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.role{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:10px;
+  background:var(--surface);border:1.5px solid var(--line);transition:border-color .15s}
+.role:hover{border-color:var(--brand)}
+.role:focus-visible{outline:3px solid var(--hazard);outline-offset:2px}
+.role b{font-size:16px}
+.role span{font-size:13px;color:var(--muted);line-height:1.45}
+.role[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);box-shadow:inset 4px 0 0 var(--brand)}
+.result{display:flex;flex-direction:column;gap:14px}
+.std{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;padding:14px 16px;border-radius:10px;background:var(--brand-soft);font-size:14px}
+.std dt{color:var(--muted);white-space:nowrap} .std dd{margin:0;min-width:0;font-weight:600}
+.pick{font-size:14px;color:var(--muted);margin:0}
+.paths{display:flex;flex-direction:column;gap:12px}
+.path{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.path.main{border-color:var(--brand)}
+.ptop{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--brand);color:var(--surface)}
+.tag.alt{background:var(--line);color:var(--ink)}
+.hours{font-family:var(--display);font-size:22px;color:var(--brand);margin-left:auto;font-variant-numeric:tabular-nums}
+.site{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px}
+.site b{font-size:15px}
+.go{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--hazard);color:var(--hazard-ink);font-weight:700;text-decoration:none;font-size:14px}
+.go:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+ol.how{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:14px}
+ol.how li::marker{font-weight:700;color:var(--brand)}
+.cname{font-weight:700;word-break:keep-all}
+.kw{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kw code{font-family:var(--body);font-weight:700;background:var(--hazard);color:var(--hazard-ink);padding:1px 8px;border-radius:4px}
+button.copy{font:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:3px 9px;border-radius:6px;border:1px solid var(--brand);background:transparent;color:var(--brand)}
+button.copy:hover{background:var(--brand-soft)}
+button.copy:focus-visible{outline:3px solid var(--hazard);outline-offset:2px}
+.trap{font-size:13px;color:var(--warn)}
+.empty{padding:22px;border-radius:12px;border:1.5px dashed var(--line);color:var(--muted);text-align:center}
+.notes{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+.notes b{color:var(--ink)}
+.submit{padding:14px 16px;border-radius:10px;border:1.5px solid var(--hazard);background:var(--surface);font-size:14px}
+.due{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;background:var(--hazard);color:var(--hazard-ink);font-size:14px;line-height:1.5}
+.due-d{font-family:var(--display);font-size:30px;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.submit{display:flex;flex-direction:column;gap:12px}
+.submit p{margin:0}
+.ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.way{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px 14px;border-radius:8px;background:var(--brand-soft)}
+.way span{color:var(--muted);font-size:13px}
+.sub-tip{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:14px}
+footer{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+[hidden]{display:none!important}
+body{margin:0}
+</style>
+</head>
+<body>
+
+<div class="tape" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <h1>교직원 안전교육 길잡이</h1>
+    <p class="lead">아직 안전교육을 이수하지 않은 분은 본인 구분을 고르세요. 이수 기준과 들어갈 사이트, 검색어, 고를 과정을 바로 알려드립니다.</p>
+    <div class="due" role="note">
+      <div class="due-d" id="dday">D-?</div>
+      <div><b>연수원 연수는 11월 25일(수)까지입니다.</b><br>15시간 과정은 시간이 걸리니 조금 서둘러 주세요. 수강신청은 11월 22일(일)에 마감됩니다.</div>
+    </div>
+  </header>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="stepno">STEP 1</span>나는 어디에 해당하나요?</h2>
+    <div class="roles" id="roles" role="group" aria-label="교직원 구분"></div>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="stepno">STEP 2</span>이렇게 이수하세요</h2>
+    <div class="result" id="result"></div>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="stepno">STEP 3</span>이수 후 제출</h2>
+    <div class="submit">
+      <p class="sub-lead">이수증은 <b>출력하지 않고 PDF로 저장</b>해 아래 둘 중 편한 방법으로 보내 주세요. 과정이 2개면 PDF도 2개 모두 보내 주세요.</p>
+      <div class="ways">
+        <div class="way"><b>업무용 메신저</b><span>안전업무 담당자(박상연)에게 PDF 파일 전송</span></div>
+        <div class="way"><b>구글 드라이브</b><span>공유 폴더에 PDF 업로드</span>
+          <a class="go" href="https://drive.google.com/drive/u/0/folders/1PSV1uYZCshPMmXBBz2QxlEQBk8MtQvaS" target="_blank" rel="noopener">이수증 폴더 열기 ↗</a></div>
+      </div>
+      <p class="sub-tip">파일 이름은 <b>이름_과정명</b>으로 저장해 주시면 정리가 쉬워요. (예: 홍길동_교직원안전교육15시간.pdf)</p>
+    </div>
+    <ul class="notes">
+      <li><b>3년 이수 기간</b>은 2024.3. ~ 2027.2.이며, 이수증 등 증빙자료를 제시할 수 있어야 합니다.</li>
+      <li><b>방과후 강사(원어민 포함)</b>는 모집 때 낸 안전교육 이수증, 학교 자체 교육, 연수원 원격연수 모두 인정됩니다.</li>
+      <li><b>현업업무 종사자</b>는 「산업안전보건법」 정기안전보건교육(매 반기 12시간 이상) 이수 시 인정됩니다.</li>
+    </ul>
+  </section>
+
+  <footer>※ 교직원 안전교육 대상자 구분 및 이수 기준(붙임2) 기준으로 정리했습니다. 과정명은 2026학년도 연수원 정규과정 기준입니다.</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ====== 사이트·과정 정보 ====== */
+const GBETI = { name:"경상북도교육청연수원", url:"https://www.gbeti.or.kr/" };
+const SAFE24 = { name:"학교안전정보센터(schoolsafe24)", url:"https://www.schoolsafe24.or.kr/front/edtpa/userEdtpaEduList.do?menuSn=538&upperMenuSn=148" };
+
+const C_TEACHER = "안전한학교실현을위한교직원안전교육(원격)";
+const C_STAFF   = "(교육훈련)(학교안전)안전한학교실현을위한교직원안전교육(원격)";
+const C_SHORT   = "(교육훈련)(학교안전)계약제교직원(3년미만)을위한학교안전교육의이해(원격)";
+
+const P = {
+  t15: { tag:"15시간", hours:"15시간", site:GBETI, kw:"교직원안전교육",
+         steps:["로그인 후 검색창에 검색어 입력", "정규 과정에서 아래 과정 선택 → 상세보기 → 수강신청", "15차시 학습 완료 후 이수증 PDF 저장"],
+         course:C_TEACHER, trap:"앞에 ‘(교육훈련)(학교안전)’이 붙은 같은 이름 과정은 직원용입니다. 교육대상이 ‘교원, 교육전문직’인 과정을 고르세요." },
+  s15: { tag:"15시간", hours:"15시간", site:GBETI, kw:"교직원안전교육",
+         steps:["로그인 후 검색창에 검색어 입력", "정규 과정에서 아래 과정 선택 → 상세보기 → 수강신청", "15차시 학습 완료 후 이수증 PDF 저장"],
+         course:C_STAFF, trap:"‘(교육훈련)’이 없는 같은 이름 과정은 교원용입니다. 교육대상이 ‘일반직 공무원, 공무직, 강사·보육교사, 학교직원’인 과정을 고르세요." },
+  g2:  { tag:"2시간 · 1개 과정", hours:"2시간", site:GBETI, kw:"안전교육",
+         steps:["로그인 후 검색창에 검색어 입력", "검색 결과에서 아래 과정 선택 → 상세보기 → 수강신청", "2차시 학습 완료 후 이수증 PDF 저장"],
+         course:C_SHORT, trap:"‘안전교육’은 결과가 많습니다. 과정명에 ‘계약제교직원(3년미만)’이 들어간 과정을 고르세요." },
+  k2:  { tag:"2시간 · 2개 과정", hours:"2개 과정", site:SAFE24, kw:null,
+         steps:["아래 버튼으로 교육 목록 페이지에 바로 접속 후 로그인", "목록에 있는 과정 2개를 모두 수강", "과정별 이수증 2장 PDF 저장"],
+         course:null, trap:"2개 과정을 모두 들어야 이수로 인정됩니다. 한 번 받은 이수증은 출강하는 여러 학교에 같이 제출할 수 있습니다." }
+};
+
+const ROLES = [
+  { id:"t", title:"교원", sub:"교(원)장, 교(원)감, 교사 (정규 교원)",
+    std:[["이수 기준","3년마다 15시간 이상"],["기간","2024.3. ~ 2027.2."]],
+    paths:[["t15","이 과정으로 이수"]] },
+  { id:"s", title:"직원 (정규·3년 이상)", sub:"일반직 공무원·직원, 3년 이상 공무직·무기계약직",
+    std:[["이수 기준","3년마다 15시간 이상"],["기간","2024.3. ~ 2027.2."],["참고","일반직은 1차시=1시간 인정 (상시학습 7시간으로 등재)"]],
+    paths:[["s15","이 과정으로 이수"]] },
+  { id:"c", title:"계약제 교직원 (3년 미만)", sub:"기간제 교사, 방과후·시간·스포츠·영어회화 강사, 대체인력, 3년 미만 공무직·계약직",
+    std:[["이수 기준","매 학기 2시간 이상 (1년 2회, 총 4시간 이상)"],["참고","15시간을 한 번에 이수하면 3년 동안 따로 안 들어도 됨"]],
+    pick:"아래 세 가지 중 편한 방법 하나를 고르세요.",
+    paths:[["g2","방법 1 · 2시간"],["k2","방법 2 · 2시간"],["c15","방법 3 · 15시간 한 번에"]] },
+  { id:"v", title:"교육활동참여자", sub:"배움터지킴이, 학교보안관, 녹색어머니회 등",
+    std:[["이수 기준","매 학년도 1회 이상 (가능한 학기 초)"]],
+    paths:[["k2","이 사이트에서 이수"]] }
+];
+/* ============================== */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+$("#roles").innerHTML = ROLES.map(r =>
+  `<button class="role" id="role-${r.id}" data-id="${r.id}" aria-pressed="false"><b>${esc(r.title)}</b><span>${esc(r.sub)}</span></button>`).join("");
+
+function pathCard(key, label, idx){
+  if (key === "c15"){
+    return `<article class="path">
+      <div class="ptop"><span class="tag alt">${esc(label)}</span><span class="hours">15시간</span></div>
+      <div class="site"><b>${esc(GBETI.name)}</b><a class="go" href="${GBETI.url}" target="_blank" rel="noopener">접속하기 ↗</a></div>
+      <ol class="how">
+        <li>로그인 후 검색창에 <span class="kw"><code>교직원안전교육</code><button class="copy" id="cp-c15-${idx}" data-t="교직원안전교육">복사</button></span> 입력</li>
+        <li><b>기간제 교사</b>는 <span class="cname">${esc(C_TEACHER)}</span></li>
+        <li><b>그 외 강사·직원</b>은 <span class="cname">${esc(C_STAFF)}</span></li>
+        <li>15차시 학습 완료 후 이수증 PDF 저장</li>
+      </ol>
+      <div class="trap">⚠ 이 방법으로 이수하면 3년 이내에는 학기별 2시간 교육을 따로 듣지 않아도 됩니다.</div>
+    </article>`;
+  }
+  const p = P[key]; const main = !label.startsWith("방법") || idx === 0;
+  const steps = p.steps.map((s,i) => {
+    if (i === 0 && p.kw) return `<li>로그인 후 검색창에 <span class="kw"><code>${esc(p.kw)}</code><button class="copy" id="cp-${key}-${idx}" data-t="${esc(p.kw)}">복사</button></span> 입력</li>`;
+    return `<li>${esc(s)}</li>`;
+  }).join("");
+  const course = p.course ? `<div><div class="pick">고를 과정</div><div class="cname">${esc(p.course)} <button class="copy" id="cn-${key}-${idx}" data-t="${esc(p.course)}">과정명 복사</button></div></div>` : "";
+  return `<article class="path ${main?"main":""}">
+    <div class="ptop"><span class="tag ${main?"":"alt"}">${esc(label)}</span><span class="hours">${esc(p.hours)}</span></div>
+    <div class="site"><b>${esc(p.site.name)}</b><a class="go" href="${p.site.url}" target="_blank" rel="noopener">접속하기 ↗</a></div>
+    <ol class="how">${steps}</ol>
+    ${course}
+    <div class="trap">⚠ ${esc(p.trap)}</div>
+  </article>`;
+}
+
+function render(id){
+  document.querySelectorAll(".role").forEach(b => b.setAttribute("aria-pressed", b.dataset.id === id));
+  const r = ROLES.find(x => x.id === id);
+  if (!r){ $("#result").innerHTML = `<div class="empty">위에서 구분을 고르면 이수 방법이 여기에 나타납니다.</div>`; return; }
+  const std = `<dl class="std">${r.std.map(([k,v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`;
+  const pick = r.pick ? `<p class="pick">${esc(r.pick)}</p>` : "";
+  $("#result").innerHTML = std + pick + `<div class="paths">${r.paths.map(([k,l],i) => pathCard(k,l,i)).join("")}</div>`;
+  try{ localStorage.setItem("role2", id); }catch(e){}
+}
+
+let tt;
+function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,1600); }
+document.addEventListener("click", e => {
+  const role = e.target.closest(".role");
+  if (role){ render(role.dataset.id); $("#s2").scrollIntoView({behavior:"smooth",block:"start"}); return; }
+  const cp = e.target.closest("button.copy"); if (!cp) return;
+  const txt = cp.dataset.t;
+  const fallback = () => { const ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select();
+    try{document.execCommand("copy"); toast("복사했어요");}catch(_){toast("길게 눌러 직접 복사해 주세요");} ta.remove(); };
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(()=>toast("복사했어요"), fallback); else fallback();
+});
+
+(function(){
+  const t = new Date(); t.setHours(0,0,0,0);
+  const n = Math.round((new Date("2026-11-25T00:00:00") - t)/864e5);
+  $("#dday").textContent = n > 0 ? `D-${n}` : n === 0 ? "D-DAY" : "마감";
+})();
+let saved = null; try{ saved = localStorage.getItem("role2"); }catch(e){}
+render(saved);
+</script>
+</body>
+</html>
